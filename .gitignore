@@ -1,0 +1,23 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor / IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Shell script backups
+*.bak
+*.swp
+*~
+
+# Logs
+*.log
+
+# Node / Python / other irrelevant files (if ever added)
+node_modules/
+__pycache__/
+*.pyc
+.env
