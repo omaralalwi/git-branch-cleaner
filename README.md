@@ -62,15 +62,3 @@ If your main branch is called `main`, just update the value accordingly.
 ## 📜 License
 
 MIT License © 2025
-
----
-
-## 💬 Inspiration
-
-Created to help developers and teams keep their Git repositories clean and fast.
-Because no one needs 1800 stale branches slowing things down 🚀
-
----
-
-Would you like me to customize this README automatically with your GitHub username and your real repo link (so you can copy-paste and publish immediately)?
-```
