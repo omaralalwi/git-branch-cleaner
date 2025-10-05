@@ -1,9 +1,3 @@
-Perfect 👍 — here’s a polished, developer-ready **`README.md`** for your new GitHub repo
-(`git-branch-cleaner`) 👇
-
----
-
-````markdown
 # 🧹 git-branch-cleaner
 
 A lightweight shell tool to **auto-delete inactive Git branches** (both local & remote)  
@@ -135,10 +129,6 @@ MIT License © 2025
 
 Created to help developers and teams keep their Git repositories clean and fast.
 Because no one needs 1800 stale branches slowing things down 🚀
-
----
-
-```
 
 ---
 
