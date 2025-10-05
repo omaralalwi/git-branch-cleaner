@@ -51,72 +51,12 @@ If your main branch is called `main`, just update the value accordingly.
 ./clean_inactive_branches.sh
 ```
 
-The script will:
-
-1. Fetch all remote branches
-2. Check each branch’s last commit date
-3. List inactive branches (> X days old)
-4. Ask for confirmation before deletion
-5. Delete inactive branches locally & remotely
-
----
-
-## 🧠 Example Output
-
-```
-Fetching latest remote info...
-✅  feature/api-refactor is active (12 days old)
-🗑️  fix/old-bug is inactive (74 days old)
-🗑️  test/deprecated-flow is inactive (129 days old)
-
-⚠️  The following branches will be deleted:
-fix/old-bug
-test/deprecated-flow
-
-Are you sure you want to delete these branches? (y/N): y
-
-Deleting remote branch: fix/old-bug
-Deleting remote branch: test/deprecated-flow
-Deleting local branch: fix/old-bug
-Deleting local branch: test/deprecated-flow
-
-✅ Cleanup complete!
-```
-
----
-
-## 🛡️ Safety Tips
-
-* The script **never touches** your `master` (or main) branch.
-* You’ll always get a confirmation before deletion.
-* To preview branches **without deleting**, comment out these lines:
-
-  ```bash
-  git push origin --delete "$branch"
-  git branch -D "$branch"
-  ```
-
----
-
 ## 🧰 Requirements
 
 * `git` 2.20+
 * Bash shell (`bash`, `zsh`, or compatible)
 * Access to your GitHub remote (via HTTPS or SSH)
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome!
-If you’d like to:
-
-* Add support for Bitbucket or GitLab
-* Include filters (e.g., keep branches by author or prefix)
-* Add dry-run mode or GitHub Action integration
-
-👉 Open an issue or PR — contributions are highly appreciated.
-
+* 
 ---
 
 ## 📜 License
