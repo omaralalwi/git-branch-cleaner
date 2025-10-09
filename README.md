@@ -48,7 +48,7 @@ If your main branch is called `main`, just update the value accordingly.
 ## 🧩 Usage
 
 ```bash
-./clean_branches.sh
+./cleanup_branches.sh
 ```
 
 ## 🧰 Requirements
