@@ -1,6 +1,6 @@
 # 🧹 git-branch-cleaner
 
-A lightweight shell tool to **auto-delete inactive Git branches** (both local & remote)  
+A lightweight shell tool to **delete inactive Git branches** (both local & remote)  
 while keeping your **main (`master`) branch** and **recently active branches** safe.  
 Perfect for developers and teams managing large repositories with hundreds of old branches.
 
