@@ -1,14 +1,21 @@
 #!/bin/bash
-MAIN_BRANCH="master"
+
+# Default values
+DEFAULT_MAIN_BRANCH="master"
 DAYS_ACTIVE=30  # keep branches updated within last X days
 
+# Ask user for main branch (optional)
+read -p "Enter main branch name (default: $DEFAULT_MAIN_BRANCH): " USER_INPUT_BRANCH
+MAIN_BRANCH=${USER_INPUT_BRANCH:-$DEFAULT_MAIN_BRANCH}
+
+echo "Using main branch: $MAIN_BRANCH"
 echo "Fetching latest remote info..."
 git fetch --all --prune
 
 echo "Checking for branches to delete (inactive > $DAYS_ACTIVE days)..."
 current_date=$(date +%s)
 
-# Get all remote branches except master and HEAD
+# Get all remote branches except main branch and HEAD
 remote_branches=$(git branch -r | grep -vE "$MAIN_BRANCH|HEAD" | sed 's/origin\///')
 
 inactive_branches=()
