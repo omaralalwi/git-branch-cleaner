@@ -8,7 +8,6 @@ Perfect for developers and teams managing large repositories with hundreds of ol
 
 ## 🚀 Features
 
-- 🧠 Detects inactive branches based on last commit date  
 - 🗑️ Deletes stale branches both **locally** and on **GitHub remote**  
 - ⚙️ Configurable inactivity threshold (default: 30 days)  
 - 🛡️ Keeps your main branch (`master` or `main`) protected  
