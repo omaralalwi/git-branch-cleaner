@@ -1,10 +1,32 @@
 #!/bin/bash
 
-# Default values
+# --- Find the nearest .git directory ---
+find_git_root() {
+  dir="$PWD"
+  while [ "$dir" != "/" ]; do
+    if [ -d "$dir/.git" ]; then
+      echo "$dir"
+      return
+    fi
+    dir=$(dirname "$dir")
+  done
+}
+
+GIT_ROOT=$(find_git_root)
+if [ -z "$GIT_ROOT" ]; then
+  echo "❌ No .git directory found in this path or parent directories."
+  exit 1
+fi
+
+cd "$GIT_ROOT" || exit 1
+echo "📁 Using repository at: $GIT_ROOT"
+echo ""
+
+# --- Default values ---
 DEFAULT_MAIN_BRANCH="master"
 DAYS_ACTIVE=30  # keep branches updated within last X days
 
-# Ask user for main branch (optional)
+# --- Ask user for main branch (optional) ---
 read -p "Enter main branch name (default: $DEFAULT_MAIN_BRANCH): " USER_INPUT_BRANCH
 MAIN_BRANCH=${USER_INPUT_BRANCH:-$DEFAULT_MAIN_BRANCH}
 
@@ -15,17 +37,16 @@ git fetch --all --prune
 echo "Checking for branches to delete (inactive > $DAYS_ACTIVE days)..."
 current_date=$(date +%s)
 
-# Get all remote branches except main branch and HEAD
+# --- Get all remote branches except main and HEAD ---
 remote_branches=$(git branch -r | grep -vE "$MAIN_BRANCH|HEAD" | sed 's/origin\///')
 
 inactive_branches=()
 
 for branch in $remote_branches; do
-  # Get last commit date in seconds since epoch
+  # Get last commit date
   last_commit_date=$(git log -1 --format="%ct" origin/$branch 2>/dev/null)
 
   if [ -z "$last_commit_date" ]; then
-    # branch might be empty or invalid
     continue
   fi
 
@@ -55,13 +76,13 @@ if [[ $confirm != [yY] ]]; then
   exit 0
 fi
 
-# Delete from remote
+# --- Delete from remote ---
 for branch in "${inactive_branches[@]}"; do
   echo "Deleting remote branch: $branch"
   git push origin --delete "$branch"
 done
 
-# Delete locally if they exist
+# --- Delete locally if exists ---
 for branch in "${inactive_branches[@]}"; do
   if git show-ref --quiet "refs/heads/$branch"; then
     echo "Deleting local branch: $branch"
