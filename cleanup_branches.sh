@@ -1,39 +1,49 @@
 #!/bin/bash
 
-# --- Find the nearest .git directory ---
-find_git_root() {
-  dir="$PWD"
-  while [ "$dir" != "/" ]; do
-    if [ -d "$dir/.git" ]; then
-      echo "$dir"
-      return
-    fi
-    dir=$(dirname "$dir")
-  done
-}
-
-GIT_ROOT=$(find_git_root)
-if [ -z "$GIT_ROOT" ]; then
-  echo "❌ No .git directory found in this path or parent directories."
-  exit 1
-fi
-
-cd "$GIT_ROOT" || exit 1
-echo "📁 Using repository at: $GIT_ROOT"
-echo ""
-
 # --- Default values ---
 DEFAULT_MAIN_BRANCH="master"
 DAYS_ACTIVE=30  # keep branches updated within last X days
 
-# --- Ask user for main branch (optional) ---
+echo ""
+echo "🧹 Git Branch Cleaner"
+echo "----------------------"
+
+# --- Accept path from argument or prompt user ---
+if [ -n "$1" ]; then
+  REPO_PATH="$1"
+else
+  read -p "Enter the path to the git repository you want to clean: " REPO_PATH
+fi
+
+# --- Validate path ---
+if [ ! -d "$REPO_PATH/.git" ]; then
+  echo "❌ Error: '$REPO_PATH' is not a valid Git repository (no .git folder found)."
+  exit 1
+fi
+
+cd "$REPO_PATH" || exit 1
+echo "📁 Using repository at: $REPO_PATH"
+echo ""
+
+# --- Ask for main branch name (optional) ---
 read -p "Enter main branch name (default: $DEFAULT_MAIN_BRANCH): " USER_INPUT_BRANCH
 MAIN_BRANCH=${USER_INPUT_BRANCH:-$DEFAULT_MAIN_BRANCH}
 
+# --- Ask for inactivity period (optional) ---
+read -p "Enter number of days to consider a branch inactive (default: $DAYS_ACTIVE): " USER_INPUT_DAYS
+if [[ "$USER_INPUT_DAYS" =~ ^[0-9]+$ ]]; then
+  DAYS_ACTIVE=$USER_INPUT_DAYS
+fi
+
+echo ""
 echo "Using main branch: $MAIN_BRANCH"
+echo "Inactive threshold: $DAYS_ACTIVE days"
+echo ""
+
 echo "Fetching latest remote info..."
 git fetch --all --prune
 
+echo ""
 echo "Checking for branches to delete (inactive > $DAYS_ACTIVE days)..."
 current_date=$(date +%s)
 
@@ -43,12 +53,8 @@ remote_branches=$(git branch -r | grep -vE "$MAIN_BRANCH|HEAD" | sed 's/origin\/
 inactive_branches=()
 
 for branch in $remote_branches; do
-  # Get last commit date
   last_commit_date=$(git log -1 --format="%ct" origin/$branch 2>/dev/null)
-
-  if [ -z "$last_commit_date" ]; then
-    continue
-  fi
+  [ -z "$last_commit_date" ] && continue
 
   diff_days=$(( (current_date - last_commit_date) / 86400 ))
 
@@ -61,7 +67,8 @@ for branch in $remote_branches; do
 done
 
 if [ ${#inactive_branches[@]} -eq 0 ]; then
-  echo "No inactive branches to delete."
+  echo ""
+  echo "✨ No inactive branches found. Everything is clean!"
   exit 0
 fi
 
