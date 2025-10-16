@@ -27,7 +27,7 @@ git clone https://github.com/omaralalwi/git-branch-cleaner.git
 cd git-branch-cleaner
 
 # Make the script executable
-chmod +x clean_inactive_branches.sh
+chmod +x cleanup_branches.sh
 ````
 
 ---
