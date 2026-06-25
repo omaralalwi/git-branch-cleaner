@@ -54,7 +54,7 @@ When running, the script will:
 You can run it **with or without arguments**:
 
 ```bash
-./git-branch-cleaner.sh
+./cleanup_branches.sh
 ```
 ➡️ You’ll be asked to enter the path to the repository you want to clean.
 
